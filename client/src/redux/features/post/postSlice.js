@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "../../../utils/axios"
-import { TOKEN, CHAT_ID } from "./constants"
 
 const initialState = {
   posts: [],
@@ -55,17 +54,6 @@ export const approvePost = createAsyncThunk(
   async (post) => {
     try {
       const { data } = await axios.put(`/posts/suggested/${post._id}`, post)
-
-      if (post.imgUrl) {
-        const image = post.imgUrl
-        axios.get(
-          `https://api.telegram.org/bot${TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=${image}&caption=${post.title}%0A${post.text}%0AАвтор: ${post.username}`
-        )
-      }
-
-      axios.get(
-        `https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${post.title}%0A${post.text}%0AАвтор: ${post.username}`
-      )
       return data
     } catch (error) {
       console.log(error)

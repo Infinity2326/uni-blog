@@ -15,6 +15,7 @@ export const SuggestedPost = () => {
   const params = useParams()
   const dispatch = useDispatch()
   const isAuth = useSelector(checkIsAuth)
+  const { user } = useSelector((state) => state.auth)
 
   const handleApprove = () => {
     try {
@@ -53,6 +54,13 @@ export const SuggestedPost = () => {
       <div className="text-xl text-center text-white py-10">Нет доступа</div>
     )
   }
+
+  if (user.role === "user") {
+    return (
+      <div className="text-xl text-center text-white py-10">Нет доступа</div>
+    )
+  }
+
   return (
     <div>
       <button className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4">

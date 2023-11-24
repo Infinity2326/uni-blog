@@ -85,6 +85,21 @@ export const Navbar = () => {
               </li>
             </>
           )}
+          {user?.role === "moderator" && (
+            <>
+              <li>
+                <NavLink
+                  to={"/suggested"}
+                  className="text-xs text-gray-400 hover:text-white"
+                  style={({ isActive }) =>
+                    isActive ? activeStyles : undefined
+                  }
+                >
+                  Предложенные посты
+                </NavLink>
+              </li>
+            </>
+          )}
         </ul>
       )}
       {/* Вывод кнопок в зависимости от авторизации пользователя */}

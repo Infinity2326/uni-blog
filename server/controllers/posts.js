@@ -3,6 +3,14 @@ import User from "../models/User.js"
 import Comment from "../models/Comment.js"
 import path, { dirname } from "path"
 import { fileURLToPath } from "url"
+import dotenv from "dotenv"
+import axios from "axios"
+
+dotenv.config()
+
+// Constants
+const TOKEN = process.env.TOKEN
+const CHAT_ID = process.env.CHAT_ID
 
 // Create post
 export const createPost = async (req, res) => {
@@ -144,6 +152,18 @@ export const approvePost = async (req, res) => {
     const post = await Post.findById(p._id)
     post.approved = true
     await post.save()
+
+    if (post.imgUrl) {
+      const __dirname = dirname(fileURLToPath(import.meta.url))
+      req.files.image.mv(path.join(__dirname, "..", "uploads", fileName))
+      axios.get(
+        `https://api.telegram.org/bot${TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=https://upload.wikimedia.org/wikipedia/commons/0/0e/Felis_silvestris_silvestris.jpg&caption=${post.title}%0A${post.text}%0AАвтор: ${post.username}`
+      )
+    } else {
+      axios.get(
+        `https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${post.title}%0A${post.text}%0AАвтор: ${post.username}`
+      )
+    }
     res.json(post)
   } catch (error) {
     res.json({ message: "Что-то пошло не так. approve" })

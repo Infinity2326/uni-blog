@@ -33,9 +33,10 @@ export const MainPage = () => {
           </div>
           <div className="basis-1/5">
             <div className="text-xs uppercase text-white">Популярное:</div>
-            {popularPosts?.map((post, idx) => (
-              <PopularPosts key={idx} post={post} />
-            ))}
+            {popularPosts?.map(
+              (post, idx) =>
+                post.approved && <PopularPosts key={idx} post={post} />
+            )}
           </div>
         </div>
       </div>

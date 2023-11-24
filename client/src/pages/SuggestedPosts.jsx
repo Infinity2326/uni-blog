@@ -8,6 +8,7 @@ export const SuggestedPosts = () => {
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const { posts } = useSelector((state) => state.post)
+  const notApproved = posts?.filter((p) => !p.approved)
 
   useEffect(() => {
     dispatch(getAllPosts())
@@ -21,13 +22,13 @@ export const SuggestedPosts = () => {
     )
   }
 
-  if (user.role !== "admin") {
+  if (user.role === "user") {
     return (
       <div className="text-xl text-center text-white py-10">Нет доступа</div>
     )
   }
 
-  if (!posts.length) {
+  if (!notApproved?.length) {
     return (
       <div className="text-xl text-center text-white py-10">
         Постов не существует

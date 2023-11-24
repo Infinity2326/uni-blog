@@ -26,7 +26,7 @@ export const PostsPage = () => {
       <div className="text-xl text-center text-white py-10">Нет доступа</div>
     )
   }
-  if (!posts.length) {
+  if (!posts?.length) {
     return (
       <div className="">
         <div className="text-xl text-center text-white py-8">
