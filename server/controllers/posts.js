@@ -154,8 +154,6 @@ export const approvePost = async (req, res) => {
     await post.save()
 
     if (post.imgUrl) {
-      const __dirname = dirname(fileURLToPath(import.meta.url))
-      req.files.image.mv(path.join(__dirname, "..", "uploads", fileName))
       axios.get(
         `https://api.telegram.org/bot${TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=https://upload.wikimedia.org/wikipedia/commons/0/0e/Felis_silvestris_silvestris.jpg&caption=${post.title}%0A${post.text}%0AАвтор: ${post.username}`
       )
