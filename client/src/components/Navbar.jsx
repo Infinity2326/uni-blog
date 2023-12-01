@@ -63,17 +63,6 @@ export const Navbar = () => {
             <>
               <li>
                 <NavLink
-                  to={"/users"}
-                  className="text-xs text-gray-400 hover:text-white"
-                  style={({ isActive }) =>
-                    isActive ? activeStyles : undefined
-                  }
-                >
-                  Пользователи
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
                   to={"/suggested"}
                   className="text-xs text-gray-400 hover:text-white"
                   style={({ isActive }) =>
@@ -81,6 +70,17 @@ export const Navbar = () => {
                   }
                 >
                   Предложенные посты
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"/users"}
+                  className="text-xs text-gray-400 hover:text-white"
+                  style={({ isActive }) =>
+                    isActive ? activeStyles : undefined
+                  }
+                >
+                  Пользователи
                 </NavLink>
               </li>
             </>
