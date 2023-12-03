@@ -25,6 +25,7 @@ export const PostPage = () => {
   const { comments } = useSelector((state) => state.comment)
   const { user } = useSelector((state) => state.auth)
   // строка браузера
+  const currentUrl = window.location.href.slice(22)
   const navigate = useNavigate()
   const params = useParams()
   const dispatch = useDispatch()
@@ -81,6 +82,13 @@ export const PostPage = () => {
     )
   }
 
+  if (post._id !== currentUrl) {
+    return (
+      <div className="text-xl text-center text-white py-10">
+        Поста не существует
+      </div>
+    )
+  }
   return (
     <div>
       <button className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4">
