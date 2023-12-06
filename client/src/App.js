@@ -16,6 +16,7 @@ import { getMe } from "./redux/features/auth/authSlice.js"
 import { SuggestedPosts } from "./pages/SuggestedPosts.jsx"
 import { SuggestedPost } from "./pages/SuggestedPost.jsx"
 import { NewsPage } from "./pages/NewsPage.jsx"
+import { SingleNewsPage } from "./pages/SingleNewsPage.jsx"
 
 // Создается общий лэйаут для хранения навбара и дочерний элементов
 function App() {
@@ -30,16 +31,16 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="posts" element={<PostsPage />} />
-        <Route path="news" element={<NewsPage />} />
         <Route path=":id" element={<PostPage />} />
+        <Route path=":id/edit" element={<EditPostPage />} />
         <Route path="new" element={<AddPostPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
-        <Route path=":id/edit" element={<EditPostPage />} />
         <Route path="users" element={<UsersListPage />} />
         <Route path="suggested" element={<SuggestedPosts />} />
         <Route path="suggested/:id" element={<SuggestedPost />} />
-        <Route path="suggested/:id" element={<SuggestedPost />} />
+        <Route path="news" element={<NewsPage />} />
+        <Route path="news/:id" element={<SingleNewsPage />} />
       </Routes>
       <ToastContainer position="bottom-right" />
     </Layout>

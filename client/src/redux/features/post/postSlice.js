@@ -3,7 +3,6 @@ import axios from "../../../utils/axios"
 
 const initialState = {
   posts: [],
-  news: [],
   popularPosts: [],
   loading: false,
 }
@@ -23,15 +22,6 @@ export const createPost = createAsyncThunk(
 export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
   try {
     const { data } = await axios.get("/posts")
-    return data
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-export const getNews = createAsyncThunk("post/getNews", async () => {
-  try {
-    const { data } = await axios.get("/posts/news")
     return data
   } catch (error) {
     console.log(error)
@@ -96,17 +86,6 @@ export const postSlice = createSlice({
       state.popularPosts = action.payload.popularPosts
     },
     [getAllPosts.rejected]: (state) => {
-      state.loading = false
-    },
-    // Получение всех новостей
-    [getNews.pending]: (state) => {
-      state.loading = true
-    },
-    [getNews.fulfilled]: (state, action) => {
-      state.loading = false
-      state.news = action.payload.news
-    },
-    [getNews.rejected]: (state) => {
       state.loading = false
     },
     // Удаление поста

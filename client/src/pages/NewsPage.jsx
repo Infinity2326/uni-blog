@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import { NewsItem } from "../components/NewsItem"
 import { useDispatch, useSelector } from "react-redux"
-import { getNews } from "../redux/features/post/postSlice"
+import { getNews } from "../redux/features/news/newsSlice"
 
 export const NewsPage = () => {
   const dispatch = useDispatch()
-  const { news } = useSelector((state) => state.post)
+  const { news } = useSelector((state) => state.news)
 
   useEffect(() => {
     dispatch(getNews())
@@ -19,7 +19,6 @@ export const NewsPage = () => {
     )
   }
   if (news) {
-    console.log(news)
     return (
       <div className="max-w-[900px] mx-auto py-10">
         <div className="flex justify-between gap-8">

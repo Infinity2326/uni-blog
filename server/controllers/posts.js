@@ -5,7 +5,6 @@ import path, { dirname } from "path"
 import { fileURLToPath } from "url"
 import dotenv from "dotenv"
 import axios from "axios"
-import { launch } from "puppeteer"
 
 dotenv.config()
 
@@ -180,42 +179,5 @@ export const getPostComments = async (req, res) => {
     res.json(list)
   } catch (error) {
     console.log(error)
-  }
-}
-
-export const getNews = async (req, res) => {
-  try {
-    const url = "https://www.muiv.ru/about/novosti/"
-    async function start() {
-      const browser = await launch({
-        headless: false,
-        defaultViewport: null,
-      })
-
-      const page = await browser.newPage()
-      await page.goto(url, { waitUntil: "domcontentloaded" })
-      const result = await page.evaluate(() => {
-        const news = []
-        const newsObj = { news: [] }
-        document.querySelectorAll(".row").forEach((n) => {
-          const imgElement = n.querySelector(".col-lg-5 div div")
-          news.push({
-            title: n.querySelector(".col-lg-7 h3")?.innerHTML,
-            text: n.querySelector(".col-lg-7 p")?.innerHTML,
-            imgUrl: `https://muiv.ru${imgElement
-              ?.getAttribute("style")
-              .slice(23, 88)}`,
-          })
-        })
-        newsObj.news = news
-        return newsObj
-      })
-      res.json(result)
-      await browser.close()
-    }
-
-    start()
-  } catch (error) {
-    res.json({ message: "Что-то пошло не так." })
   }
 }

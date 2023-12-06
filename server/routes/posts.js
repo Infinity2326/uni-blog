@@ -10,7 +10,6 @@ import {
   updatePost,
   getPostComments,
   approvePost,
-  getNews,
 } from "../controllers/posts.js"
 
 const router = new Router()
@@ -23,10 +22,6 @@ router.post("/", checkAuth, createPost)
 // Get all
 // http://localhost:3002/api/posts
 router.get("/", getAll)
-
-// Get news
-// http://localhost:3002/api/posts/news
-router.get("/news", getNews)
 
 // Get post by id
 // http://localhost:3002/api/posts/:id
