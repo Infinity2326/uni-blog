@@ -10,7 +10,6 @@ export const NewsPage = () => {
   useEffect(() => {
     dispatch(getNews())
   }, [dispatch])
-
   if (!news) {
     return (
       <div className="text-xl text-center text-white py-10">
@@ -18,6 +17,7 @@ export const NewsPage = () => {
       </div>
     )
   }
+
   if (news) {
     return (
       <div className="max-w-[900px] mx-auto py-10">

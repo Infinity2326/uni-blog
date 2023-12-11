@@ -23,6 +23,15 @@ const PostSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    whoLiked: [
+      {
+        type: String,
+      },
+    ],
     approved: {
       type: Boolean,
       default: false,

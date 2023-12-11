@@ -4,6 +4,7 @@ import {
   AiOutlineMessage,
   AiTwotoneEdit,
   AiFillDelete,
+  AiOutlineLike,
 } from "react-icons/ai"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
@@ -12,19 +13,23 @@ import { toast } from "react-toastify"
 import Moment from "react-moment"
 import axios from "../utils/axios"
 import {
-  createComment,
+  createPostComment,
   getPostComments,
 } from "../redux/features/comment/commentSlice"
+import { likePost, getAllPosts } from "../redux/features/post/postSlice.js"
 import { CommentItem } from "../components/CommentItem.jsx"
 import { checkIsAuth } from "../redux/features/auth/authSlice"
 
 export const PostPage = () => {
   const [post, setPost] = useState(null)
+  const [likes, setLikes] = useState(0)
+  const [views, setViews] = useState(0)
   const [comment, setComment] = useState("")
 
   const { comments } = useSelector((state) => state.comment)
   const { user } = useSelector((state) => state.auth)
-  // строка браузера
+  const { posts } = useSelector((state) => state.post)
+
   const currentUrl = window.location.href.slice(22)
   const navigate = useNavigate()
   const params = useParams()
@@ -48,7 +53,7 @@ export const PostPage = () => {
         toast("Для комментирования нужно войти")
       }
       const postId = params.id
-      dispatch(createComment({ postId, comment }))
+      dispatch(createPostComment({ postId, comment }))
       setComment("")
     } catch (error) {
       console.log(error)
@@ -63,10 +68,35 @@ export const PostPage = () => {
     }
   }, [params.id, dispatch])
 
+  const handleLike = async () => {
+    try {
+      if (!isAuth) {
+        navigate("/login")
+        toast("Для оценивания нужно войти")
+      }
+      const postId = params.id
+      dispatch(likePost({ postId, user }))
+    } catch (error) {}
+  }
+
+  const loadPost = useCallback(async () => {
+    posts.forEach((p) => {
+      if (p._id === params.id) {
+        setPost(p)
+        setLikes(p.likes)
+        setViews(p.views)
+      }
+    })
+  }, [params.id, posts])
+
   const fetchPost = useCallback(async () => {
     const { data } = await axios.get(`/posts/${params.id}`)
     setPost(data)
   }, [params.id])
+
+  useEffect(() => {
+    loadPost()
+  }, [loadPost])
 
   useEffect(() => {
     fetchPost()
@@ -75,6 +105,10 @@ export const PostPage = () => {
   useEffect(() => {
     fetchComments()
   }, [fetchComments])
+
+  useEffect(() => {
+    dispatch(getAllPosts())
+  }, [dispatch])
 
   if (!post) {
     return (
@@ -89,6 +123,7 @@ export const PostPage = () => {
       </div>
     )
   }
+
   return (
     <div>
       <button className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4">
@@ -124,12 +159,23 @@ export const PostPage = () => {
 
           <div className="flex gap-3 items-center mt-2 justify-between">
             <div className="flex gap-3 mt-4">
-              <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                <AiFillEye /> <span>{post.views}</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                <AiOutlineMessage /> <span>{post.comments?.length || 0}</span>
-              </button>
+              {post.approved && (
+                <>
+                  <button
+                    className="flex items-center justify-center gap-2 text-xs text-white opacity-50"
+                    onClick={handleLike}
+                  >
+                    <AiOutlineLike /> <span>{likes}</span>
+                  </button>
+                  <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+                    <AiOutlineMessage />{" "}
+                    <span>{post.comments?.length || 0}</span>
+                  </button>
+                  <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+                    <AiFillEye /> <span>{views}</span>
+                  </button>
+                </>
+              )}
             </div>
 
             {user?._id === post.author && (

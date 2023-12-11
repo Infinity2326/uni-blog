@@ -10,6 +10,7 @@ import {
   updatePost,
   getPostComments,
   approvePost,
+  likePost,
 } from "../controllers/posts.js"
 
 const router = new Router()
@@ -50,5 +51,9 @@ router.put("/:id", checkAuth, updatePost)
 // Get post comments
 // http://localhost:3002/api/posts/comments/:id
 router.get("/comments/:id", getPostComments)
+
+// Like post
+// http://localhost:3002/api/posts/like/:id
+router.put("/like/:id", likePost)
 
 export default router

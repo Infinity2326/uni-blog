@@ -88,6 +88,7 @@ export const getById = async (req, res) => {
   }
 }
 
+// Get user's posts
 export const getMyPosts = async (req, res) => {
   try {
     const user = await User.findById(req.userId)
@@ -103,6 +104,7 @@ export const getMyPosts = async (req, res) => {
   }
 }
 
+// Remove post by id
 export const removePost = async (req, res) => {
   try {
     // req.params.id айдишник самого поста
@@ -118,6 +120,7 @@ export const removePost = async (req, res) => {
   }
 }
 
+// Edit post
 export const updatePost = async (req, res) => {
   try {
     // req.params.id айдишник самого поста
@@ -146,6 +149,7 @@ export const updatePost = async (req, res) => {
   }
 }
 
+// Approve post to main page
 export const approvePost = async (req, res) => {
   try {
     const p = await Post.findById(req.params.id)
@@ -168,6 +172,7 @@ export const approvePost = async (req, res) => {
   }
 }
 
+// Fetch post's comments
 export const getPostComments = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -179,5 +184,34 @@ export const getPostComments = async (req, res) => {
     res.json(list)
   } catch (error) {
     console.log(error)
+  }
+}
+
+// Like post
+export const likePost = async (req, res) => {
+  try {
+    const { postId, user } = req.body
+    const post = await Post.findById(postId)
+    if (
+      !post.whoLiked.find((id) => {
+        if (id === user._id) {
+          return true
+        }
+      })
+    ) {
+      const result = await Post.findByIdAndUpdate(postId, {
+        $inc: { likes: 1 },
+        $push: { whoLiked: user._id },
+      })
+      res.json(result)
+    } else {
+      const result = await Post.findByIdAndUpdate(postId, {
+        $inc: { likes: -1 },
+        $pull: { whoLiked: user._id },
+      })
+      res.json(result)
+    }
+  } catch (error) {
+    res.json({ message: "Что-то пошло не так." })
   }
 }

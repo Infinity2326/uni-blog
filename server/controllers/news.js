@@ -1,28 +1,6 @@
 import News from "../models/News.js"
 import { launch } from "puppeteer"
-import Post from "../models/Post.js"
-import User from "../models/User.js"
 import Comment from "../models/Comment.js"
-import path, { dirname } from "path"
-import { fileURLToPath } from "url"
-import dotenv from "dotenv"
-import axios from "axios"
-
-export const saveNews = async (title, text, imgUrl) => {
-  try {
-    const singleNews = new News({
-      title,
-      text,
-      imgUrl,
-    })
-
-    await singleNews.save()
-    res.json({ message: "Что-то пошло не так." })
-    return res.json({ singleNews })
-  } catch (error) {
-    res.json({ message: "Что-то пошло не так." })
-  }
-}
 
 export const getNews = async (req, res) => {
   try {
@@ -50,24 +28,27 @@ export const getNews = async (req, res) => {
             text,
             imgUrl,
           })
-          saveNews(title, text, imgUrl)
         })
+        return news
+      })
 
-        news.news.map(async (n) => {
-          const addNews = new News({
+      result.news.forEach(async (n) => {
+        if (!(await News.findOne({ imgUrl: n.imgUrl }).exec())) {
+          const singleNews = new News({
             title: n.title,
             text: n.text,
             imgUrl: n.imgUrl,
           })
-          await addNews.save()
-        })
-
-        return news
+          await singleNews.save()
+        }
       })
-      res.json(result)
+      const news = await News.find()
+      if (!news) {
+        return res.json({ message: "Новостей не существует" })
+      }
+      res.json({ news })
       await browser.close()
     }
-
     start()
   } catch (error) {
     res.json({ message: "Что-то пошло не так." })
@@ -76,11 +57,53 @@ export const getNews = async (req, res) => {
 
 export const getById = async (req, res) => {
   try {
-    // req.params.id айдишник самого поста
     const singleNews = await News.findByIdAndUpdate(req.params.id, {
       $inc: { views: 1 },
     })
     res.json(singleNews)
+  } catch (error) {
+    res.json({ message: "Что-то пошло не так." })
+  }
+}
+
+export const getNewsComments = async (req, res) => {
+  try {
+    const news = await News.findById(req.params.id)
+    const list = await Promise.all(
+      news.comments.map((comment) => {
+        return Comment.findById(comment)
+      })
+    )
+    res.json(list)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// Like news
+export const likeNews = async (req, res) => {
+  try {
+    const { newsId, user } = req.body
+    const news = await News.findById(newsId)
+    if (
+      !news.whoLiked.find((id) => {
+        if (id === user._id) {
+          return true
+        }
+      })
+    ) {
+      const result = await news.updateOne({
+        $inc: { likes: 1 },
+        $push: { whoLiked: user._id },
+      })
+      res.json(news)
+    } else {
+      const result = await news.updateOne({
+        $inc: { likes: -1 },
+        $pull: { whoLiked: user._id },
+      })
+      res.json(news)
+    }
   } catch (error) {
     res.json({ message: "Что-то пошло не так." })
   }

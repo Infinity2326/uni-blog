@@ -15,6 +15,18 @@ export const getNews = createAsyncThunk("news/getNews", async () => {
   }
 })
 
+export const likeNews = createAsyncThunk(
+  "news/likePost",
+  async (newsId, user) => {
+    try {
+      const { data } = await axios.put(`/news/like/${newsId}`, newsId, user)
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
+
 export const newsSlice = createSlice({
   name: "news",
   initialState: initialState,
@@ -29,6 +41,21 @@ export const newsSlice = createSlice({
       state.news = action.payload.news
     },
     [getNews.rejected]: (state) => {
+      state.loading = false
+    },
+    // Лайк поста
+    [likeNews.pending]: (state) => {
+      state.loading = true
+    },
+    [likeNews.fulfilled]: (state, action) => {
+      state.loading = false
+      // Ищем пост по айди, который был изменен и обновляем его
+      const index = state.news.findIndex(
+        (news) => news._id === action.payload._id
+      )
+      state.news[index] = action.payload
+    },
+    [likeNews.rejected]: (state) => {
       state.loading = false
     },
   },

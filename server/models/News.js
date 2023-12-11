@@ -5,20 +5,35 @@ const NewsSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      // required: true,
     },
     text: {
       type: String,
-      required: true,
+      // required: true,
     },
     imgUrl: {
       type: String,
-      default: "",
+      // required: true,
     },
     views: {
       type: Number,
       default: 0,
     },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    whoLiked: [
+      {
+        type: String,
+      },
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamps: true }
 )

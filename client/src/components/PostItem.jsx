@@ -1,5 +1,5 @@
 import React from "react"
-import { AiFillEye, AiOutlineMessage } from "react-icons/ai"
+import { AiFillEye, AiOutlineMessage, AiOutlineLike } from "react-icons/ai"
 import Moment from "react-moment"
 import { Link } from "react-router-dom"
 import "moment/locale/ru"
@@ -37,12 +37,19 @@ export const PostItem = ({ post }) => {
           {post.text}
         </p>
         <div className="flex gap-3 items-center mt-2">
-          <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-            <AiFillEye /> <span>{post.views}</span>
-          </button>
-          <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-            <AiOutlineMessage /> <span>{post.comments?.length || 0}</span>
-          </button>
+          {post.approved && (
+            <>
+              <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+                <AiOutlineLike /> <span>{post.likes}</span>
+              </button>
+              <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+                <AiOutlineMessage /> <span>{post.comments?.length || 0}</span>
+              </button>
+              <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+                <AiFillEye /> <span>{post.views}</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </Link>

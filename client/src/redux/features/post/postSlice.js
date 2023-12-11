@@ -61,6 +61,18 @@ export const approvePost = createAsyncThunk(
   }
 )
 
+export const likePost = createAsyncThunk(
+  "post/likePost",
+  async (postId, user) => {
+    try {
+      const { data } = await axios.put(`/posts/like/${postId}`, postId, user)
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
+
 export const postSlice = createSlice({
   name: "post",
   initialState: initialState,
@@ -128,9 +140,23 @@ export const postSlice = createSlice({
         (post) => post._id === action.payload._id
       )
       state.posts[index] = action.payload
-      console.log(action.payload)
     },
     [approvePost.rejected]: (state) => {
+      state.loading = false
+    },
+    // Лайк поста
+    [likePost.pending]: (state) => {
+      state.loading = true
+    },
+    [likePost.fulfilled]: (state, action) => {
+      state.loading = false
+      // Ищем пост по айди, который был изменен и обновляем его
+      const index = state.posts.findIndex(
+        (post) => post._id === action.payload._id
+      )
+      state.posts[index] = action.payload
+    },
+    [likePost.rejected]: (state) => {
       state.loading = false
     },
   },
