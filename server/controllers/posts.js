@@ -76,12 +76,24 @@ export const getAll = async (req, res) => {
   }
 }
 
+// Get post by id
 export const getById = async (req, res) => {
   try {
     // req.params.id айдишник самого поста
     const post = await Post.findByIdAndUpdate(req.params.id, {
       $inc: { views: 1 },
     })
+    res.json(post)
+  } catch (error) {
+    res.json({ message: "Что-то пошло не так." })
+  }
+}
+
+// Refresh post's data
+export const refreshPost = async (req, res) => {
+  try {
+    // req.params.id айдишник самого поста
+    const post = await Post.findById(req.params.id)
     res.json(post)
   } catch (error) {
     res.json({ message: "Что-то пошло не так." })
@@ -199,18 +211,19 @@ export const likePost = async (req, res) => {
         }
       })
     ) {
-      const result = await Post.findByIdAndUpdate(postId, {
+      await Post.findByIdAndUpdate(postId, {
         $inc: { likes: 1 },
         $push: { whoLiked: user._id },
       })
-      res.json(result)
     } else {
-      const result = await Post.findByIdAndUpdate(postId, {
+      await Post.findByIdAndUpdate(postId, {
         $inc: { likes: -1 },
         $pull: { whoLiked: user._id },
       })
-      res.json(result)
     }
+
+    const result = await Post.findById(postId)
+    res.json(result)
   } catch (error) {
     res.json({ message: "Что-то пошло не так." })
   }

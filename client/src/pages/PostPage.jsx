@@ -22,8 +22,6 @@ import { checkIsAuth } from "../redux/features/auth/authSlice"
 
 export const PostPage = () => {
   const [post, setPost] = useState(null)
-  const [likes, setLikes] = useState(0)
-  const [views, setViews] = useState(0)
   const [comment, setComment] = useState("")
 
   const { comments } = useSelector((state) => state.comment)
@@ -35,6 +33,7 @@ export const PostPage = () => {
   const params = useParams()
   const dispatch = useDispatch()
   const isAuth = useSelector(checkIsAuth)
+  const id = posts.findIndex((p) => p._id === params.id)
 
   const removePostHandler = () => {
     try {
@@ -60,14 +59,6 @@ export const PostPage = () => {
     }
   }
 
-  const fetchComments = useCallback(async () => {
-    try {
-      dispatch(getPostComments(params.id))
-    } catch (error) {
-      console.log(error)
-    }
-  }, [params.id, dispatch])
-
   const handleLike = async () => {
     try {
       if (!isAuth) {
@@ -79,36 +70,36 @@ export const PostPage = () => {
     } catch (error) {}
   }
 
-  const loadPost = useCallback(async () => {
-    posts.forEach((p) => {
-      if (p._id === params.id) {
-        setPost(p)
-        setLikes(p.likes)
-        setViews(p.views)
-      }
-    })
-  }, [params.id, posts])
+  // const refreshPost = async () => {
+  //   const { data } = await axios.get(`/posts/refresh/${params.id}`)
+  //   setPost(data)
+  // }
 
   const fetchPost = useCallback(async () => {
     const { data } = await axios.get(`/posts/${params.id}`)
     setPost(data)
   }, [params.id])
 
-  useEffect(() => {
-    loadPost()
-  }, [loadPost])
+  const fetchComments = useCallback(async () => {
+    try {
+      dispatch(getPostComments(params.id))
+    } catch (error) {
+      console.log(error)
+    }
+  }, [params.id, dispatch])
 
   useEffect(() => {
     fetchPost()
-  }, [fetchPost])
-
-  useEffect(() => {
-    fetchComments()
-  }, [fetchComments])
+    dispatch(getAllPosts())
+  }, [fetchPost, dispatch])
 
   useEffect(() => {
     dispatch(getAllPosts())
   }, [dispatch])
+
+  useEffect(() => {
+    fetchComments()
+  }, [fetchComments])
 
   if (!post) {
     return (
@@ -165,14 +156,16 @@ export const PostPage = () => {
                     className="flex items-center justify-center gap-2 text-xs text-white opacity-50"
                     onClick={handleLike}
                   >
-                    <AiOutlineLike /> <span>{likes}</span>
+                    <AiOutlineLike />
+                    <span>{posts[id]?.likes}</span>
                   </button>
                   <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                    <AiOutlineMessage />{" "}
+                    <AiOutlineMessage />
                     <span>{post.comments?.length || 0}</span>
                   </button>
                   <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                    <AiFillEye /> <span>{views}</span>
+                    <AiFillEye />
+                    <span>{posts[id]?.views}</span>
                   </button>
                 </>
               )}
@@ -214,7 +207,7 @@ export const PostPage = () => {
             </button>
           </form>
           {comments?.map((cmt) => (
-            <CommentItem key={cmt._id} cmt={cmt} username={user.username} />
+            <CommentItem key={cmt._id} cmt={cmt} username={user?.username} />
           ))}
         </div>
       </div>

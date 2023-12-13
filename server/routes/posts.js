@@ -11,6 +11,7 @@ import {
   getPostComments,
   approvePost,
   likePost,
+  refreshPost,
 } from "../controllers/posts.js"
 
 const router = new Router()
@@ -27,6 +28,10 @@ router.get("/", getAll)
 // Get post by id
 // http://localhost:3002/api/posts/:id
 router.get("/:id", getById)
+
+// Refresh post
+// http://localhost:3002/api/posts/:id
+router.get("/refresh/:id", refreshPost)
 
 // Get my posts
 // http://localhost:3002/api/posts/user/me

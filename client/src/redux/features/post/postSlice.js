@@ -66,6 +66,7 @@ export const likePost = createAsyncThunk(
   async (postId, user) => {
     try {
       const { data } = await axios.put(`/posts/like/${postId}`, postId, user)
+      getAllPosts()
       return data
     } catch (error) {
       console.log(error)
@@ -135,7 +136,6 @@ export const postSlice = createSlice({
     },
     [approvePost.fulfilled]: (state, action) => {
       state.loading = false
-      // Ищем пост по айди, который был изменен и обновляем его
       const index = state.posts.findIndex(
         (post) => post._id === action.payload._id
       )
@@ -150,7 +150,6 @@ export const postSlice = createSlice({
     },
     [likePost.fulfilled]: (state, action) => {
       state.loading = false
-      // Ищем пост по айди, который был изменен и обновляем его
       const index = state.posts.findIndex(
         (post) => post._id === action.payload._id
       )

@@ -10,7 +10,7 @@ import {
 } from "../redux/features/comment/commentSlice"
 import { CommentItem } from "../components/CommentItem.jsx"
 import { toast } from "react-toastify"
-import { likeNews } from "../redux/features/news/newsSlice.js"
+import { getNews, likeNews } from "../redux/features/news/newsSlice.js"
 
 export const SingleNewsPage = () => {
   const [singleNews, setSingleNews] = useState(null)
@@ -18,17 +18,14 @@ export const SingleNewsPage = () => {
 
   const { comments } = useSelector((state) => state.comment)
   const { user } = useSelector((state) => state.auth)
+  const { news } = useSelector((state) => state.news)
 
   const currentUrl = window.location.href.slice(22)
   const navigate = useNavigate()
   const params = useParams()
   const dispatch = useDispatch()
   const isAuth = useSelector(checkIsAuth)
-
-  const fetchNews = useCallback(async () => {
-    const { data } = await axios.get(`/news/${params.id}`)
-    setSingleNews(data)
-  }, [params.id])
+  const id = news.findIndex((n) => n._id === params.id)
 
   const handleSubmit = () => {
     try {
@@ -46,7 +43,7 @@ export const SingleNewsPage = () => {
     }
   }
 
-  const handleLike = () => {
+  const handleLike = async () => {
     try {
       if (!isAuth) {
         navigate("/login")
@@ -54,8 +51,14 @@ export const SingleNewsPage = () => {
       }
       const newsId = params.id
       dispatch(likeNews({ newsId, user }))
+      dispatch(getNews())
     } catch (error) {}
   }
+
+  const fetchNews = useCallback(async () => {
+    const { data } = await axios.get(`/news/${params.id}`)
+    setSingleNews(data)
+  }, [params.id])
 
   const fetchComments = useCallback(async () => {
     try {
@@ -67,7 +70,12 @@ export const SingleNewsPage = () => {
 
   useEffect(() => {
     fetchNews()
-  }, [fetchNews])
+    dispatch(getNews())
+  }, [fetchNews, dispatch])
+
+  useEffect(() => {
+    dispatch(getNews())
+  }, [dispatch])
 
   useEffect(() => {
     fetchComments()
@@ -115,14 +123,14 @@ export const SingleNewsPage = () => {
                 className="flex items-center justify-center gap-2 text-xs text-white opacity-50"
                 onClick={handleLike}
               >
-                <AiOutlineLike /> <span>{singleNews?.likes}</span>
+                <AiOutlineLike /> <span>{news[id]?.likes}</span>
               </button>
               <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                <AiOutlineMessage />{" "}
+                <AiOutlineMessage />
                 <span>{singleNews.comments?.length || 0}</span>
               </button>
               <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                <AiFillEye /> <span>{singleNews?.views}</span>
+                <AiFillEye /> <span>{news[id]?.views}</span>
               </button>
             </div>
           </div>
