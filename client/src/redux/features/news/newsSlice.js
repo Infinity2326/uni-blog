@@ -48,7 +48,7 @@ export const newsSlice = createSlice({
     },
     [getNews.fulfilled]: (state, action) => {
       state.loading = false
-      state.news = action.payload.news
+      state.news = action?.payload?.news
     },
     [getNews.rejected]: (state) => {
       state.loading = false
@@ -74,8 +74,8 @@ export const newsSlice = createSlice({
     },
     [getById.fulfilled]: (state, action) => {
       state.loading = false
-      const index = state.news.findIndex((n) => n._id === action.payload._id)
-      state.news[index] = action.payload
+      const index = state?.news?.findIndex((n) => n._id === action.payload._id)
+      state.news[index] = action?.payload
     },
     [getById.rejected]: (state) => {
       state.loading = false
