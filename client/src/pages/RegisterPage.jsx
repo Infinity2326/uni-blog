@@ -21,6 +21,20 @@ export const RegisterPage = () => {
 
   const handleSubmit = () => {
     try {
+      if (!username || !password) {
+        return toast.error("Заполните пароль и логин!")
+      } else if (password.length < 6) {
+        return toast.error("Длинна пароля должна превышать 6 символов")
+      } else if (username.length < 3) {
+        return toast.error("Длинна логина должна превышать 3 символа")
+      }
+      if (password.includes(username)) {
+        return toast.error("Пароль не должен содержать логин")
+      }
+      if (password.includes(" ") || username.includes(" ")) {
+        return toast.error("Пароль и логин не должны содержать пробелов")
+      }
+
       dispatch(registerUser({ username, password }))
       setPassword("")
       setUsername("")
