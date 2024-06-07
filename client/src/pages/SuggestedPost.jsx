@@ -78,7 +78,7 @@ export const SuggestedPost = () => {
             >
               {post.imgUrl && (
                 <img
-                  src={`http://localhost:3002/${post.imgUrl}`}
+                  src={`http://localhost:3002/${post?.imgUrl}`}
                   alt="post"
                   className="object-cover w-full"
                 />
@@ -86,13 +86,15 @@ export const SuggestedPost = () => {
             </div>
           </div>
           <div className="flex justify-between items-center pt-2">
-            <div className="text-xs text-white opacity-50">{post.username}</div>
             <div className="text-xs text-white opacity-50">
-              <Moment data={post.createdAt} format="D MMM YYYY" />
+              {post?.username}
+            </div>
+            <div className="text-xs text-white opacity-50">
+              <Moment data={post?.createdAt} format="D MMM YYYY" />
             </div>
           </div>
-          <div className="text-white text-xl">{post.title}</div>
-          <p className="text-white text-xs opacity-60 pt-4">{post.text}</p>
+          <div className="text-white text-xl">{post?.title}</div>
+          <p className="text-white text-xs opacity-60 pt-4">{post?.text}</p>
 
           <div className="flex gap-3 items-center mt-2 justify-between">
             <div className="flex gap-3 mt-4">

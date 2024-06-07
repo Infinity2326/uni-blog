@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { createPost } from "../redux/features/post/postSlice"
 import { useNavigate } from "react-router-dom"
 import { checkIsAuth } from "../redux/features/auth/authSlice"
+import { toast } from "react-toastify"
 
 export const AddPostPage = () => {
   const [title, setTitle] = useState("")
@@ -20,6 +21,7 @@ export const AddPostPage = () => {
       data.append("image", image)
       dispatch(createPost(data))
       navigate("/")
+      toast.success("Пост ожидает проверки!")
     } catch (error) {
       console.log(error)
     }

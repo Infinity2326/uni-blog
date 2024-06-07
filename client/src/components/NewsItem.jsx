@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 export const NewsItem = ({ n }) => {
   if (n?.title) {
     return (
-      <Link to={`/news/${n._id}`}>
+      <Link to={`/news/${n?._id}`}>
         <div className="flex flex-col basis-1/4 flex-grow">
           <div className="flex rounded-sm h-80">
             <img src={n?.imgUrl} alt="news" className="object-cover w-full" />

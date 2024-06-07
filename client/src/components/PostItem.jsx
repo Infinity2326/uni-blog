@@ -13,12 +13,12 @@ export const PostItem = ({ post }) => {
   }
 
   return (
-    <Link to={`/${post._id}`}>
+    <Link to={`/${post?._id}`}>
       <div className="flex flex-col basis-1/4 flex-grow">
         <div
           className={post.imgUrl ? "flex rounded-sm h-80" : "flex rounded-sm"}
         >
-          {post.imgUrl && (
+          {post?.imgUrl && (
             <img
               src={`http://localhost:3002/${post.imgUrl}`}
               alt="post"
@@ -27,26 +27,26 @@ export const PostItem = ({ post }) => {
           )}
         </div>
         <div className="flex justify-between items-center pt-2">
-          <div className="text-xs text-white opacity-50">{post.username}</div>
+          <div className="text-xs text-white opacity-50">{post?.username}</div>
           <div className="text-xs text-white opacity-50">
-            <Moment date={post.createdAt} format="D MMM YYYY" />
+            <Moment date={post?.createdAt} format="D MMM YYYY" />
           </div>
         </div>
-        <div className="text-white text-xl">{post.title}</div>
+        <div className="text-white text-xl">{post?.title}</div>
         <p className="text-white text-xs opacity-60 pt-4 line-clamp-4">
-          {post.text}
+          {post?.text}
         </p>
         <div className="flex gap-3 items-center mt-2">
-          {post.approved && (
+          {post?.approved && (
             <>
               <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                <AiOutlineLike /> <span>{post.likes}</span>
+                <AiOutlineLike /> <span>{post?.likes}</span>
               </button>
               <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                <AiOutlineMessage /> <span>{post.comments?.length || 0}</span>
+                <AiOutlineMessage /> <span>{post?.comments?.length || 0}</span>
               </button>
               <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-                <AiFillEye /> <span>{post.views}</span>
+                <AiFillEye /> <span>{post?.views}</span>
               </button>
             </>
           )}

@@ -87,7 +87,7 @@ export const SingleNewsPage = () => {
     )
   }
 
-  if (singleNews._id !== currentUrl.slice(5)) {
+  if (singleNews?._id !== currentUrl?.slice(5)) {
     return (
       <div className="text-xl text-center text-white py-10">
         Новости не существует

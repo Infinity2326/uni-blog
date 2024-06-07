@@ -70,11 +70,6 @@ export const PostPage = () => {
     } catch (error) {}
   }
 
-  // const refreshPost = async () => {
-  //   const { data } = await axios.get(`/posts/refresh/${params.id}`)
-  //   setPost(data)
-  // }
-
   const fetchPost = useCallback(async () => {
     const { data } = await axios.get(`/posts/${params.id}`)
     setPost(data)

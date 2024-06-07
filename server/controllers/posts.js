@@ -171,7 +171,7 @@ export const approvePost = async (req, res) => {
 
     if (post.imgUrl) {
       axios.get(
-        `https://api.telegram.org/bot${TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=https://upload.wikimedia.org/wikipedia/commons/0/0e/Felis_silvestris_silvestris.jpg&caption=${post.title}%0A${post.text}%0AАвтор: ${post.username}`
+        `https://api.telegram.org/bot${TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxI1QYjzO6LuN1VJwVhvNdA4Ej5LzxXvGfAg&s&caption=${post.title}%0A${post.text}%0AАвтор: ${post.username}`
       )
     } else {
       axios.get(

@@ -30,7 +30,7 @@ router.get("/", getAll)
 router.get("/:id", getById)
 
 // Refresh post
-// http://localhost:3002/api/posts/:id
+// http://localhost:3002/api/posts/refresh/:id
 router.get("/refresh/:id", refreshPost)
 
 // Get my posts

@@ -14,7 +14,7 @@ export const UserItem = ({ user }) => {
   const dispatch = useDispatch()
 
   const changeRole = (r) => {
-    if (u.role === "user") {
+    if (u?.role === "user") {
       toast("Нет доступа")
     }
     setRole(r)
@@ -27,11 +27,7 @@ export const UserItem = ({ user }) => {
         {user.username}
       </td>
       <td className="px-6 py-4 font-medium whitespace-nowrap text-white">
-        <Moment
-          onClick={() => console.log(user.createdAt)}
-          date={user.createdAt}
-          format="D MMM YYYY"
-        />
+        <Moment date={user.createdAt} format="D MMM YYYY" />
       </td>
       <td className="px-6 py-4 font-medium whitespace-nowrap text-white">
         <Dropdown

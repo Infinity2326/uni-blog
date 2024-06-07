@@ -12,7 +12,6 @@ const router = new Router()
 
 // Register
 // http://localhost:3002/api/auth/register
-// запрос с фронтенда на бэкэнд - post
 router.post("/register", register)
 
 // Login
@@ -20,12 +19,10 @@ router.post("/register", register)
 router.post("/login", login)
 
 // Get me
-// checkAuth middleware
 // http://localhost:3002/api/auth/me
 router.get("/me", checkAuth, getMe)
 
 // Get users
-// checkAuth middleware
 // http://localhost:3002/api/auth/users
 router.get("/users", checkAuth, getUsers)
 

@@ -23,7 +23,7 @@ export const UsersListPage = () => {
     )
   }
 
-  if (!(user.role === "admin")) {
+  if (!(user?.role === "admin")) {
     return (
       <div className="text-xl text-center text-white py-10">Нет доступа</div>
     )

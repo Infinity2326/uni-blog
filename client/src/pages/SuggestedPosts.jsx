@@ -22,7 +22,7 @@ export const SuggestedPosts = () => {
     )
   }
 
-  if (user.role === "user") {
+  if (user?.role === "user") {
     return (
       <div className="text-xl text-center text-white py-10">Нет доступа</div>
     )
@@ -40,7 +40,7 @@ export const SuggestedPosts = () => {
       <div className="flex justify-between gap-8">
         <div className="flex flex-col gap-10 basis-4/5">
           {posts
-            ?.filter((p) => !p.approved)
+            ?.filter((p) => !p?.approved)
             .map((post, idx) => (
               <SuggestedPostItem
                 className="w-1/2 mx-auto py-10 flex flex-col gap-10"

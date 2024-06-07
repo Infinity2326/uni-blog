@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { updatePost } from "../redux/features/post/postSlice"
 import axios from "../utils/axios"
+import { toast } from "react-toastify"
 
 export const EditPostPage = () => {
   const [title, setTitle] = useState("")
@@ -30,6 +31,7 @@ export const EditPostPage = () => {
       updatedPost.append("image", newImage)
       dispatch(updatePost(updatedPost))
       navigate("/posts")
+      toast.success("Пост изменен")
     } catch (error) {
       console.log(error)
     }
