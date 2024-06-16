@@ -28,7 +28,6 @@ export const PostPage = () => {
   const { user } = useSelector((state) => state.auth)
   const { posts } = useSelector((state) => state.post)
 
-  const currentUrl = window.location.href.slice(22)
   const navigate = useNavigate()
   const params = useParams()
   const dispatch = useDispatch()
@@ -73,6 +72,7 @@ export const PostPage = () => {
   const fetchPost = useCallback(async () => {
     const { data } = await axios.get(`/posts/${params.id}`)
     setPost(data)
+    console.log(data)
   }, [params.id])
 
   const fetchComments = useCallback(async () => {
@@ -99,14 +99,6 @@ export const PostPage = () => {
   if (!post) {
     return (
       <div className="text-xl text-center text-white py-10">Загрузка...</div>
-    )
-  }
-
-  if (post._id !== currentUrl) {
-    return (
-      <div className="text-xl text-center text-white py-10">
-        Поста не существует
-      </div>
     )
   }
 
@@ -202,7 +194,7 @@ export const PostPage = () => {
             </button>
           </form>
           {comments?.map((cmt) => (
-            <CommentItem key={cmt._id} cmt={cmt} username={user?.username} />
+            <CommentItem key={cmt?._id} cmt={cmt} username={user?.username} />
           ))}
         </div>
       </div>
